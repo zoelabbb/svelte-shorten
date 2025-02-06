@@ -63,31 +63,42 @@
         <h1 class="text-2xl font-semibold text-gray-800 text-center">🔗 URL Shortener</h1>
         <p class="text-sm text-gray-500 text-center mb-4">Enter a URL and get a shorter version!</p>
 
-        <input bind:value={url} type="text" placeholder="Enter your URL..."
-            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition outline-none"
-            on:input={() => (errorMessage = '')} />
+        <div class="relative w-full">
+            <input bind:value={url} type="text" placeholder="Enter your URL..."
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition outline-none"
+                on:input={() => (errorMessage = '')} />
+            {#if url}
+                <button on:click={() => (url = '')} class="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">
+                    ✖
+                </button>
+            {/if}
+        </div>
 
         {#if errorMessage}
-            <p class="text-red-500 text-sm mt-2">{errorMessage}</p>
+            <p class="text-red-500 text-sm mt-2">⚠ {errorMessage}</p>
         {/if}
 
         <button on:click={shortenUrl} 
             class="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg mt-3 
-                   hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                   hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             disabled={loading}>
             {#if loading}
-                <span class="loading loading-spinner"></span>
+                <span class="animate-spin border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
             {:else}
                 Shorten URL
             {/if}
         </button>
 
         {#if shortUrl}
-            <div class="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg text-center">
+            <div class="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg text-center flex flex-col items-center">
                 <p class="text-gray-700">Shortened URL:</p>
                 <a href={shortUrl} class="text-blue-600 font-medium underline break-words" target="_blank" rel="noopener noreferrer">
                     {shortUrl}
                 </a>
+                <button on:click={() => navigator.clipboard.writeText(shortUrl)}
+                    class="mt-2 text-sm bg-gray-200 px-3 py-1 rounded-lg hover:bg-gray-300">
+                    📋 Copy
+                </button>
             </div>
         {/if}
     </div>
