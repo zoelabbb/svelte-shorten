@@ -1,4 +1,4 @@
-import type { PageLoad } from './shorten/$types';
+import type { PageLoad } from './$types';
 
 export const load: PageLoad = ({ url }) => {
     const baseUrl = url.origin; // Ambil domain dari request
