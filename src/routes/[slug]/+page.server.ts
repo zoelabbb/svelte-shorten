@@ -12,7 +12,9 @@ export async function load({ params }) {
         .from(shortUrls)
         .where(eq(shortUrls.shortCode, slug));
 
-    if (!data) throw redirect(302, '/shorten'); // Redirect jika tidak ditemukan
+    if (!data) {
+        throw redirect(302, '/shorten'); // Redirect ke form jika tidak ditemukan
+    }
 
     // Update jumlah klik
     await db
@@ -20,5 +22,5 @@ export async function load({ params }) {
         .set({ clicks: data.clicks + 1 })
         .where(eq(shortUrls.shortCode, slug));
 
-    throw redirect(302, data.originalUrl);
+    throw redirect(302, data.originalUrl); // Redirect ke URL asli
 }

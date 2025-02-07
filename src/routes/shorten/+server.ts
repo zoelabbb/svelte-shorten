@@ -33,7 +33,7 @@ export async function POST({ request }) {
             .from(shortUrls)
             .where(eq(shortUrls.id, insertResult[0].id)); // ✅ Gunakan insertResult[0].id
 
-        return json({ shortUrl: `/short/${newUrl.shortCode}` });
+        return json({ shortUrl: `/${newUrl.shortCode}` });
     } catch (error) {
         console.error(error);
         return json({ error: 'Something went wrong' }, { status: 500 });
