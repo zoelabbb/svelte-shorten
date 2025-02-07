@@ -3,24 +3,27 @@ import { db } from '$lib/server/db';
 import { shortUrls } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 
-export async function load({ params }) {
+export async function GET({ params }) {
     const { slug } = params;
 
-    // Cari URL berdasarkan short_code
     const [data] = await db
         .select()
         .from(shortUrls)
         .where(eq(shortUrls.shortCode, slug));
 
+    console.log('Data ditemukan:', data); // Debugging
+
     if (!data) {
-        throw redirect(302, '/shorten'); // Redirect ke form jika tidak ditemukan
+        console.log('Slug tidak ditemukan, redirect ke home');
+        throw redirect(302, '/');
     }
 
-    // Update jumlah klik
+    console.log('Redirecting ke:', data.originalUrl);
+
     await db
         .update(shortUrls)
         .set({ clicks: data.clicks + 1 })
         .where(eq(shortUrls.shortCode, slug));
 
-    throw redirect(302, data.originalUrl); // Redirect ke URL asli
+    throw redirect(302, data.originalUrl);
 }
